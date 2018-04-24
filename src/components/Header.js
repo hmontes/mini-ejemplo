@@ -1,19 +1,34 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { loginUser, logoutUser } from '../redux/actions';
 
 class Header extends React.Component {
+  onClickLogout = e => {
+    e.preventDefault();
+    this.props.logoutUser();
+  };
+
+  onClickLogin = e => {
+    e.preventDefault();
+    this.props.loginUser();
+  };
+
   renderOnline = () => {
     return (
-      <p>Bienvenido</p>
-    )
-  }
+      <a href="" className="button is-primary" onClick={this.onClickLogout}>
+        Hernán, Cerrar sesión
+      </a>
+    );
+  };
 
   renderOffline = () => {
     return (
       <div className="field is-grouped">
         <p className="control">
-          <a href="" className="button">
+          <a href="" className="button" onClick={this.onClickLogin}>
             Iniciar Sesión
-            </a>
+          </a>
         </p>
         <p className="control">
           <a href="" className="button is-primary">
@@ -21,8 +36,8 @@ class Header extends React.Component {
           </a>
         </p>
       </div>
-    )
-  }
+    );
+  };
 
   render() {
     return (
@@ -37,22 +52,22 @@ class Header extends React.Component {
           <div className="navbar-end">
             <div className="navbar-item">
               {this.props.isAuth ? this.renderOnline() : this.renderOffline()}
-
             </div>
           </div>
         </div>
       </nav>
-    )
+    );
   }
 }
 
-// Simular Redux
-// Cambiar valor a True o False
-Header.defaultProps = {
-  isAuth: false
-}
+const mapStateToProps = state => {
+  return {
+    isAuth: state.auth.isAuth
+  };
+};
 
 // Recordar que Redux se comunica con los componentes
 // Por medio de Props
 
-export default Header;
+export default connect(mapStateToProps, { loginUser, logoutUser })(Header);
+// export default Header;
